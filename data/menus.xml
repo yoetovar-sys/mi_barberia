@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menú principal en la barra superior -->
+    <menuitem
+        id="menu_mi_barberia_root"
+        name="Mi Barbería"
+        sequence="15"/>
+
+    <!-- Submenú que abre la lista de clientes -->
+    <menuitem
+        id="menu_mi_barberia"
+        name="Clientes"
+        parent="menu_mi_barberia_root"
+        action="action_mi_barberia"
+        sequence="1"/>
+
+</odoo>
