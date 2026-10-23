@@ -132,4 +132,19 @@
         </field>
     </record>
 
+    <!-- Extensión del Formulario Oficial de Contactos con XPath -->
+    <record id="view_partner_form_barberia" model="ir.ui.view">
+        <field name="name">res.partner.form.barberia</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <!-- XPath busca la caja de botones y mete nuestro botón con icono de tijeras -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="action_view_citas_barberia" icon="fa-scissors">
+                    <field string="Citas Barbería" name="citas_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+    
 </odoo>

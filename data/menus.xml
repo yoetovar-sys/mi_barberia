@@ -7,12 +7,27 @@
         name="Mi Barbería"
         sequence="15"/>
 
-    <!-- Submenú que abre la lista de clientes -->
+    <!-- Submenú 1: Agenda de Citas (mi.barberia) -->
     <menuitem
         id="menu_mi_barberia"
-        name="Clientes"
+        name="Citas"
         parent="menu_mi_barberia_root"
         action="action_mi_barberia"
         sequence="1"/>
+
+    <!-- Acción para Clientes / Contactos de Odoo (res.partner) -->
+    <record id="action_clientes_contactos" model="ir.actions.act_window">
+        <field name="name">Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <!-- Submenú 2: Fichas de Clientes (res.partner donde están las tijeras) -->
+    <menuitem
+        id="menu_clientes_root"
+        name="Clientes"
+        parent="menu_mi_barberia_root"
+        action="action_clientes_contactos"
+        sequence="2"/>
 
 </odoo>

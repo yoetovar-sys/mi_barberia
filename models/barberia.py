@@ -112,3 +112,31 @@ class MiBarberia(models.Model):
                     "¡El precio del corte debe ser mayor a 0 dólares!"
                 )
 
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    barberia_citas_ids = fields.One2many(
+        comodel_name='mi.barberia',
+        inverse_name='cliente_id',
+        string='Citas de Barbería',
+    )
+    citas_count = fields.Integer(
+        string='Nº de Citas',
+        compute='_compute_citas_count',
+    )
+
+    def _compute_citas_count(self):
+        """Cuenta cuántas citas tiene este cliente en la barbería"""
+        for partner in self:
+            partner.citas_count = len(partner.barberia_citas_ids)
+
+    def action_view_citas_barberia(self):
+        """Abre la pantalla con las citas filtradas solo de este cliente"""
+        return {
+            'name': 'Citas de Barbería',
+            'type': 'ir.actions.act_window',
+            'res_model': 'mi.barberia',
+            'view_mode': 'kanban,calendar,list,form',
+            'domain': [('cliente_id', '=', self.id)],
+            'context': {'default_cliente_id': self.id},
+        }
