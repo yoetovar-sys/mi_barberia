@@ -50,6 +50,9 @@
                             <field name="precio"/>
                             <field name="fecha"/>
                         </group>
+                        <group string="Notas y Preferencias">
+                            <field name="notas" placeholder="Ej: El cliente prefiere corte a tijera..."/>
+                        </group>
                     </group> 
                 </sheet>
             </form>

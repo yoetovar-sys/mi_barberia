@@ -51,6 +51,7 @@ class MiBarberia(models.Model):
             ('espera', 'En espera'),
             ('atendido', 'Atendido'),
             ('cancelado', 'Cancelado'),
+            
         ],
         string='Estado',
         default='borrador',
@@ -62,7 +63,9 @@ class MiBarberia(models.Model):
         string='Fecha',
         default=fields.Date.context_today,
     )
-
+    notas = fields.Html(
+        string='Notas y Preferencias',
+    )
     # --- Métodos de Acción para los Botones ---
     def action_espera(self):
         """Pasa la cita a En espera"""
