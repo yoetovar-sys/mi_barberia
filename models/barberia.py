@@ -44,6 +44,22 @@ class MiBarberia(models.Model):
     precio = fields.Float(
         string='Precio',
     )
+    porcentaje_comision = fields.Float(
+        string='% Comisión Barbero',
+        default=40.0,
+    )
+    
+    comision_barbero = fields.Float(
+        string='Ganancia del Barbero',
+        compute='_compute_comision',
+        store=True,
+    )
+
+    @api.depends('precio', 'porcentaje_comision')
+    def _compute_comision(self):
+        """Calcula automáticamente la comisión del barbero"""
+        for record in self:
+            record.comision_barbero = record.precio * (record.porcentaje_comision / 100.0)
     
     estado = fields.Selection(
         selection=[

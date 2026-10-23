@@ -48,6 +48,8 @@
                         <group string="Servicio de Barbería">
                             <field name="tipo_corte"/>
                             <field name="precio"/>
+                            <field name="porcentaje_comision"/>
+                            <field name="comision_barbero" readonly="1"/>
                             <field name="fecha"/>
                         </group>
                         <group string="Notas y Preferencias">
