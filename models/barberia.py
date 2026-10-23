@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 class MiBarberia(models.Model):
     _name = 'mi.barberia'
@@ -86,4 +86,13 @@ class MiBarberia(models.Model):
         """Regresa la cita a Borrador"""
         for record in self:
             record.estado = 'borrador'
+            
+    @api.constrains('precio')
+    def _check_precio_positivo(self):
+        """Impide guardar precios menores o iguales a cero"""
+        for record in self:
+            if record.precio <= 0:
+                raise exceptions.ValidationError(
+                    "¡El precio del corte debe ser mayor a 0 dólares!"
+                )
 
