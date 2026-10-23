@@ -102,11 +102,24 @@
             </kanban>
         </field>
     </record>
-
+        <!-- Vista Calendario de Citas -->
+    <record id="view_mi_barberia_calendar" model="ir.ui.view">
+        <field name="name">view.mi.barberia.calendar</field>
+        <field name="model">mi.barberia</field>
+        <field name="arch" type="xml">
+            <calendar string="Agenda de Citas" date_start="fecha" color="estado" mode="month">
+                <field name="cliente_id" avatar_field="avatar_128"/>
+                <field name="tipo_corte"/>
+                <field name="precio"/>
+                <field name="estado"/>
+            </calendar>
+        </field>
+    </record>
+    
     <record id="action_mi_barberia" model="ir.actions.act_window">
         <field name="name">Mi Barbería</field>
         <field name="res_model">mi.barberia</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">kanban,calendar,list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 ¡Registra tu primer cliente en la barbería!
