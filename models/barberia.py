@@ -36,4 +36,3 @@ class MiBarberia(models.Model):
         string= 'Fecha'
     )
 
-@api.model_create_multi
