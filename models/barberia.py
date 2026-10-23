@@ -74,6 +74,31 @@ class MiBarberia(models.Model):
         required=True,
         copy=False,
     )
+    metodo_pago = fields.Selection(
+        selection=[
+            ('efectivo', 'Efectivo'),
+            ('tarjeta', 'Tarjeta'),
+            ('transferencia', 'Transferencia'),
+        ],
+        string='Método de Pago',
+        readonly=True,
+    )
+    propina = fields.Float(
+        string='Propina',
+        readonly=True,
+        default=0.0,
+    )
+
+    def action_abrir_cobro_wizard(self):
+        """Abre la ventana flotante (Wizard) para cobrar"""
+        return {
+            'name': 'Cobrar Turno',
+            'type': 'ir.actions.act_window',
+            'res_model': 'cobrar.turno.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {'default_cita_id': self.id},
+        }
     
     fecha = fields.Date(
         string='Fecha',
@@ -140,3 +165,51 @@ class ResPartner(models.Model):
             'domain': [('cliente_id', '=', self.id)],
             'context': {'default_cliente_id': self.id},
         }
+        
+class CobrarTurnoWizard(models.TransientModel):
+    _name = 'cobrar.turno.wizard'
+    _description = 'Asistente para Cobrar Cita'
+
+    cita_id = fields.Many2one(
+        comodel_name='mi.barberia',
+        string='Cita',
+        required=True,
+    )
+    metodo_pago = fields.Selection(
+        selection=[
+            ('efectivo', 'Efectivo'),
+            ('tarjeta', 'Tarjeta'),
+            ('transferencia', 'Transferencia'),
+        ],
+        string='Método de Pago',
+        default='efectivo',
+        required=True,
+    )
+    precio = fields.Float(
+        related='cita_id.precio',
+        string='Precio del Servicio',
+        readonly=True,
+    )
+    propina = fields.Float(
+        string='Propina Voluntaria',
+        default=0.0,
+    )
+    total_cobrar = fields.Float(
+        string='Total a Cobrar',
+        compute='_compute_total_cobrar',
+    )
+
+    @api.depends('precio', 'propina')
+    def _compute_total_cobrar(self):
+        for wizard in self:
+            wizard.total_cobrar = wizard.precio + wizard.propina
+
+    def action_confirmar_pago(self):
+        """Guarda el cobro en la cita y la marca como Atendida"""
+        for wizard in self:
+            wizard.cita_id.write({
+                'estado': 'atendido',
+                'metodo_pago': wizard.metodo_pago,
+                'propina': wizard.propina,
+            })
+        return {'type': 'ir.actions.act_window_close'}

@@ -25,6 +25,8 @@
             <form string="Mi Barbería">
                 <header>
                     <!-- Botones de Acción que llaman a los métodos Python -->
+                    <!-- Botón para abrir la ventana flotante de cobro -->
+                    <button name="action_abrir_cobro_wizard" string="Cobrar Turno" type="object" class="btn-success" invisible="estado != 'espera'"/>
                     <button name="action_espera" string="Poner en Espera" type="object" class="oe_highlight" invisible="estado != 'borrador'"/>
                     <button name="action_atendido" string="Marcar Atendido" type="object" class="oe_highlight" invisible="estado != 'espera'"/>
                     <button name="action_cancelado" string="Cancelar Cita" type="object" invisible="estado in ('atendido', 'cancelado')"/>
@@ -131,7 +133,30 @@
             </p>
         </field>
     </record>
-
+        <!-- Vista Formulario de la Ventana Flotante (Wizard de Cobro) -->
+    <record id="view_cobrar_turno_wizard_form" model="ir.ui.view">
+        <field name="name">cobrar.turno.wizard.form</field>
+        <field name="model">cobrar.turno.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cobrar Turno">
+                <group>
+                    <group string="Forma de Pago">
+                        <field name="cita_id" readonly="1"/>
+                        <field name="metodo_pago" widget="radio"/>
+                    </group>
+                    <group string="Montos a Cobrar">
+                        <field name="precio"/>
+                        <field name="propina"/>
+                        <field name="total_cobrar" class="fs-3 fw-bold text-success"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_confirmar_pago" string="Confirmar y Cobrar" type="object" class="btn-primary"/>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
     <!-- Extensión del Formulario Oficial de Contactos con XPath -->
     <record id="view_partner_form_barberia" model="ir.ui.view">
         <field name="name">res.partner.form.barberia</field>
@@ -146,5 +171,5 @@
             </xpath>
         </field>
     </record>
-    
+
 </odoo>
