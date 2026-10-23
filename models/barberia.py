@@ -3,10 +3,32 @@ from odoo import models, fields, api
 class MiBarberia(models.Model):
     _name = 'mi.barberia'
     _description = 'Gestión del Cliente'
+    _rec_name = 'cliente_id'
+    
+    cliente_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Cliente',
+        required=True,
+        ondelete='restrict',
+    )
     
     name = fields.Char(
-        string='Nombre del Cliente',
-        required=True,
+        string='Nombre',
+        related='cliente_id.name',
+        store=True,
+        readonly=True,
+    )
+    
+    telefono = fields.Char(
+        related='cliente_id.phone',
+        string='Teléfono',
+        readonly=True,
+    )
+    
+    correo = fields.Char(
+        related='cliente_id.email',
+        string='Correo Electrónico',
+        readonly=True,
     )
     
     tipo_corte = fields.Selection(
